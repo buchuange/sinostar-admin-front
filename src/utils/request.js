@@ -47,8 +47,9 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (response.status !== 200) {
+      debugger
       Message({
-        message: res.errorMsg || 'Error',
+        message: res.errMsg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
@@ -66,15 +67,15 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.errorMsg || 'Error'))
+      return Promise.reject(new Error(res.errMsg || 'Error'))
     } else {
       return res
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log('err.response: ', error.response)
     Message({
-      message: error.errorMsg,
+      message: error.response.data.errMsg,
       type: 'error',
       duration: 5 * 1000
     })

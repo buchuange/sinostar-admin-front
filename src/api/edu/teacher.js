@@ -35,3 +35,11 @@ export function updateTeacher(teacher) {
   })
 }
 
+// 查询角色详细
+export function getTeacher(id) {
+  return request({
+    url: `/api/teacher/detail/${id}`,
+    method: 'get'
+  })
+}
+

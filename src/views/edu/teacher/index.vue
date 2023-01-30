@@ -42,56 +42,41 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
-      </el-col>
-      <RightToolBar :show-search.sync="showSearch" @queryTable="getList" />
-    </el-row>
-
+    <div style="margin-top: 10px">
+      <el-button
+        type="primary"
+        plain
+        icon="el-icon-plus"
+        size="mini"
+        @click="handleAdd"
+      >新增</el-button>
+      <el-button
+        type="success"
+        plain
+        icon="el-icon-edit"
+        size="mini"
+        :disabled="single"
+        @click="handleUpdate"
+      >修改</el-button>
+      <el-button
+        type="danger"
+        plain
+        icon="el-icon-delete"
+        size="mini"
+        :disabled="multiple"
+        @click="handleDelete"
+      >删除</el-button>
+    </div>
+    <RightToolBar :show-search.sync="showSearch" @queryTable="getList" :columns="columns"></RightToolBar>
     <el-table style="margin-top: 10px" v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#eef1f6',color:'#606266'}">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="讲师编号" prop="teacherCode" width="120" />
-      <el-table-column label="讲师名称" prop="teacherName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="讲师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column label="讲师名称" prop="teacherName" width="120" v-if="columns[0].visible" />
+      <el-table-column label="讲师编号" prop="teacherCode" :show-overflow-tooltip="true" width="150" v-if="columns[1].visible" />
+      <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="150" v-if="columns[2].visible" />
+      <el-table-column label="讲师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="150" v-if="columns[3].visible" />
+      <el-table-column label="手机号码" prop="phoneNumber" :show-overflow-tooltip="true" width="150" v-if="columns[4].visible" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180" v-if="columns[5].visible">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>
@@ -121,12 +106,89 @@
       :limit.sync="queryParams.size"
       @pagination="getList"
     />
+
+    <!-- 添加或修改讲师配置对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="讲师名称" prop="teacherName">
+              <el-input v-model="form.teacherName" placeholder="请输入讲师名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="讲师头衔" prop="level">
+              <el-select
+                v-model="form.level"
+                placeholder="讲师头衔"
+                clearable
+                style="width: 240px"
+              >
+                <el-option
+                  v-for="item in levelScopeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="手机号码" prop="phoneNumber">
+              <el-input v-model="form.phoneNumber" placeholder="请输入手机号码" maxlength="11" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="讲师顺序" prop="orderNum">
+              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 讲师头像 -->
+        <el-form-item label="讲师头像" prop="avatar">
+          <!-- 头衔缩略图 -->
+          <pan-thumb :image="form.avatar"/>
+          <!-- 文件上传按钮 -->
+          <el-button type="primary" icon="el-icon-upload" @click="imageCropperShow=true">更换头像
+          </el-button>
+          <!--
+              v-show：是否显示上传组件
+              :key：类似于id，如果一个页面多个图片上传控件，可以做区分
+              :url：后台上传的url地址
+              @close：关闭上传组件
+              @crop-upload-success：上传成功后的回调
+                <input type="file" name="file"/>
+              -->
+          <image-cropper v-show="imageCropperShow"
+                         :width="300"
+                         :height="300"
+                         :key="imageCropperKey"
+                         :url="BASE_API+'/api/file/upload?fileHost=avatar'"
+                         field="file"
+                         @close="close"
+                         @crop-upload-success="cropSuccess"/>
+        </el-form-item>
+        <el-form-item label="讲师资历" prop="teacherCareer">
+          <el-input v-model="form.teacherCareer" placeholder="请输入讲师资历"/>
+        </el-form-item>
+        <el-form-item label="讲师简介" prop="teacherIntro">
+          <el-input v-model="form.teacherIntro" :autosize="{ minRows: 2, maxRows: 5}" type="textarea"
+                    placeholder="请输入讲师简介"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { listTeacher, delTeacher, addTeacher, updateTeacher } from '@/api/edu/teacher'
+import { listTeacher, delTeacher, addTeacher, updateTeacher, getTeacher } from '@/api/edu/teacher'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
 import RightToolBar from '@/components/RightToolBar'
@@ -142,6 +204,7 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      codes: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -168,7 +231,7 @@ export default {
       levelScopeOptions: [
         {
           value: '1',
-          label: '高级讲师'
+          label: '初级讲师'
         },
         {
           value: '2',
@@ -176,13 +239,9 @@ export default {
         },
         {
           value: '3',
-          label: '普通讲师'
+          label: '高级讲师'
         }
       ],
-      // 菜单列表
-      menuOptions: [],
-      // 部门列表
-      deptOptions: [],
       // 查询参数
       queryParams: {
         current: 1,
@@ -190,24 +249,48 @@ export default {
         keyword: undefined,
         level: undefined
       },
+      // 列信息
+      columns: [
+        { key: 0, label: `讲师名称`, visible: true },
+        { key: 1, label: `讲师编号`, visible: true },
+        { key: 2, label: `讲师资历`, visible: true },
+        { key: 3, label: `讲师头衔`, visible: true },
+        { key: 4, label: `手机号码`, visible: true },
+        { key: 5, label: `创建时间`, visible: true }
+      ],
       // 表单参数
-      form: {},
+      form: {
+        orderNum: 0,
+        avatar: process.env.VUE_APP_OSS_PATH + '/avatar/default.jpg'
+      },
       defaultProps: {
         children: 'children',
         label: 'label'
       },
       // 表单校验
       rules: {
-        roleName: [
-          { required: true, message: '角色名称不能为空', trigger: 'blur' }
+        teacherName: [
+          { required: true, message: "讲师名称不能为空", trigger: "blur" },
+          { min: 2, max: 20, message: '讲师名称长度必须介于 2 和 20 之间', trigger: 'blur' }
         ],
-        roleKey: [
-          { required: true, message: '权限字符不能为空', trigger: 'blur' }
+        level: [
+          { required: true, message: "讲师头衔不能为空", trigger: "blur" }
         ],
-        roleSort: [
-          { required: true, message: '角色顺序不能为空', trigger: 'blur' }
+        teacherCareer: [
+          { required: true, message: "讲师资历不能为空", trigger: "blur" }
+        ],
+        phoneNumber: [
+          {
+            required: true,
+            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+            message: "请输入正确的手机号码",
+            trigger: "blur"
+          }
         ]
-      }
+      },
+      imageCropperShow: false, // 上传弹框组件是否显示
+      imageCropperKey: 0, // 上传组件id
+      BASE_API: process.env.VUE_APP_BASE_API
     }
   },
   created() {
@@ -218,7 +301,6 @@ export default {
     getList() {
       this.loading = true
       listTeacher(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-        console.log(response)
         this.teacherList = response.data
         this.total = response.pagination.total
         this.loading = false
@@ -230,33 +312,15 @@ export default {
       this.open = false
       this.reset()
     },
-    // 取消按钮（数据权限）
-    cancelDataScope() {
-      this.openDataScope = false
-      this.reset()
-    },
     // 表单重置
     reset() {
-      if (this.$refs.menu != undefined) {
-        this.$refs.menu.setCheckedKeys([])
-      }
-      this.menuExpand = false,
-      this.menuNodeAll = false,
-      this.deptExpand = true,
-      this.deptNodeAll = false,
       this.form = {
-        roleId: undefined,
-        roleName: undefined,
-        roleKey: undefined,
-        roleSort: 0,
-        status: '0',
-        menuIds: [],
-        deptIds: [],
-        menuCheckStrictly: true,
-        deptCheckStrictly: true,
-        remark: undefined
+        orderNum: 0,
+        avatar: process.env.VUE_APP_OSS_PATH + '/avatar/default.jpg'
       }
-      this.resetForm('form')
+      if (this.$refs['form']) {
+        this.$refs['form'].resetFields()
+      }
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -271,65 +335,40 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.roleId)
-      this.single = selection.length != 1
+      this.ids = selection.map(item => item.id)
+      this.codes = selection.map(item => item.teacherCode)
+      this.single = selection.length !== 1
       this.multiple = !selection.length
-    },
-    // 更多操作触发
-    handleCommand(command, row) {
-      switch (command) {
-        case 'handleDataScope':
-          this.handleDataScope(row)
-          break
-        case 'handleAuthUser':
-          this.handleAuthUser(row)
-          break
-        default:
-          break
-      }
     },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
-      this.getMenuTreeselect()
       this.open = true
-      this.title = '添加角色'
+      this.title = '添加讲师'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
-      const roleId = row.roleId || this.ids
-      const roleMenu = this.getRoleMenuTreeselect(roleId)
-      getRole(roleId).then(response => {
-        this.form = response.data
+      const teacherId = row.id || this.ids[0]
+      getTeacher(teacherId).then(response => {
+        this.form = response
         this.open = true
-        this.$nextTick(() => {
-          roleMenu.then(res => {
-            const checkedKeys = res.checkedKeys
-            checkedKeys.forEach((v) => {
-              this.$nextTick(() => {
-                this.$refs.menu.setChecked(v, true, false)
-              })
-            })
-          })
-        })
-        this.title = '修改角色'
+        this.title = '修改讲师'
       })
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.form.roleId != undefined) {
-            this.form.menuIds = this.getMenuAllCheckedKeys()
-            updateRole(this.form).then(response => {
+          if (this.form.id !== undefined) {
+            updateTeacher(this.form).then(response => {
               this.$modal.msgSuccess('修改成功')
               this.open = false
               this.getList()
             })
           } else {
-            this.form.menuIds = this.getMenuAllCheckedKeys()
-            addRole(this.form).then(response => {
+            addTeacher(this.form).then(response => {
+              console.log(response)
               this.$modal.msgSuccess('新增成功')
               this.open = false
               this.getList()
@@ -340,19 +379,14 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const roleIds = row.roleId || this.ids
-      this.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项？').then(function() {
-        return delRole(roleIds)
+      const teacherCodes = row.teacherCode || this.codes
+      const teacherIds = row.id || this.ids
+      this.$modal.confirm('是否确认删除讲师编号为【' + teacherCodes + '】的数据项？').then(function() {
+        return delTeacher(teacherIds)
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess('删除成功')
       }).catch(() => {})
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('system/role/export', {
-        ...this.queryParams
-      }, `role_${new Date().getTime()}.xlsx`)
     },
     addDateRange(params, dateRange) {
       const search = params
@@ -360,6 +394,19 @@ export default {
       search.createTimeStart = dateRange[0]
       search.createTimeEnd = dateRange[1]
       return search
+    },
+    /** 上传成功后的回调函数 */
+    cropSuccess(data) {
+      this.imageCropperShow = false
+      this.form.avatar = data.url
+      // 上传成功后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
+      this.imageCropperKey = this.imageCropperKey + 1
+    },
+    /** 关闭上传组件 */
+    close() {
+      this.imageCropperShow = false
+      // 上传失败后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
+      this.imageCropperKey = this.imageCropperKey + 1
     }
   }
 }
