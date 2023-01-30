@@ -10,7 +10,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="讲师头衔" prop="teacherLevel">
+      <el-form-item label="讲师头衔" prop="level">
         <el-select
           v-model="queryParams.level"
           placeholder="讲师头衔"
@@ -71,7 +71,7 @@
     <el-table style="margin-top: 10px" v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#eef1f6',color:'#606266'}">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="讲师名称" prop="teacherName" width="120" v-if="columns[0].visible" />
+      <el-table-column label="讲师名称" prop="teacherName" width="150" v-if="columns[0].visible" />
       <el-table-column label="讲师编号" prop="teacherCode" :show-overflow-tooltip="true" width="150" v-if="columns[1].visible" />
       <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="150" v-if="columns[2].visible" />
       <el-table-column label="讲师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="150" v-if="columns[3].visible" />
