@@ -139,7 +139,21 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/edu/teacher/index'),
         name: '讲师管理',
-        meta: {title: '讲师管理', icon: 'peoples', noCache: true}
+        meta: { title: '讲师管理', icon: 'peoples', noCache: true }
+      }
+    ]
+  },
+  // 课程类别管理
+  {
+    path: '/subject',
+    component: Layout,
+    redirect: '/subject/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/edu/subject/index'),
+        name: '课程类别管理',
+        meta: { title: '课程类别管理', icon: 'tree-table', noCache: true }
       }
     ]
   },
