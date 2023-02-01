@@ -153,8 +153,36 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/edu/subject/index'),
         name: '课程类别管理',
-        meta: { title: '课程类别管理', icon: 'tree-table', noCache: true }
+        meta: { title: '课程类别管理', icon: 'tree', noCache: true }
       }
+    ]
+  },
+  // 课程管理
+  {
+    path: '/course',
+    component: Layout,
+    redirect: '/course/list',
+    name: 'Course',
+    meta: { title: '课程管理', icon: 'education' },
+    children: [{
+      path: 'list',
+      name: '课程列表',
+      component: () => import('@/views/edu/course/list'),
+      meta: { title: '课程列表', icon: 'list' }
+    },
+    {
+      path: 'info',
+      name: '课程信息',
+      component: () => import('@/views/edu/course/form'),
+      meta: { title: '发布课程', icon: 'form' }
+    },
+    {
+      path: 'info/:id',
+      name: '编辑课程信息',
+      component: () => import('@/views/edu/course/form'),
+      meta: { title: '编辑课程基本信息', icon: 'form', noCache: true },
+      hidden: true
+    }
     ]
   },
   {
