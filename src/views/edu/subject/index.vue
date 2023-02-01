@@ -25,27 +25,25 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="info"
-          plain
-          icon="el-icon-sort"
-          size="mini"
-          @click="toggleExpandAll"
-        >展开/折叠</el-button>
-      </el-col>
-    </el-row>
-    <RightToolBar :show-search.sync="showSearch" @queryTable="getList" />
+    <div style="display: flex">
+      <el-button
+        type="primary"
+        plain
+        icon="el-icon-plus"
+        size="mini"
+        @click="handleAdd"
+      >新增
+      </el-button>
+      <el-button
+        type="info"
+        plain
+        icon="el-icon-sort"
+        size="mini"
+        @click="toggleExpandAll"
+      >展开/折叠
+      </el-button>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </div>
 
     <el-table
       v-if="refreshTable"
@@ -57,9 +55,9 @@
       style="margin-top: 10px"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column prop="name" label="课程类别名称" width="260" show-overflow-tooltip="true" />
-      <el-table-column prop="description" label="描述" width="260" show-overflow-tooltip="true" />
-      <el-table-column prop="orderNum" label="排序" width="120" />
+      <el-table-column prop="name" label="课程类别名称" width="260" :show-overflow-tooltip="true"/>
+      <el-table-column prop="description" label="描述" width="260" :show-overflow-tooltip="true"/>
+      <el-table-column prop="orderNum" label="排序" width="120"/>
       <el-table-column prop="status" label="状态" width="120">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == '0' ? '' : 'danger'">{{ scope.row.statusDetail }}</el-tag>
@@ -77,20 +75,23 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
-          >新增</el-button>
+          >新增
+          </el-button>
           <el-button
             v-if="!scope.row.children"
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -101,19 +102,20 @@
         <el-row>
           <el-col v-if="form.parentId !== '0'" :span="24">
             <el-form-item label="上级类别" prop="parentId">
-              <treeselect v-model="form.parentId" :options="subjectOptions" :normalizer="normalizer" placeholder="选择上级类别" />
+              <treeselect v-model="form.parentId" :options="subjectOptions" :normalizer="normalizer"
+                          placeholder="选择上级类别"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="类别名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入类别名称" />
+              <el-input v-model="form.name" placeholder="请输入类别名称"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="显示排序" prop="orderNum">
-              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+              <el-input-number v-model="form.orderNum" controls-position="right" :min="0"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -129,7 +131,8 @@
                   v-for="dict in statusScopeOptions"
                   :key="dict.value"
                   :label="dict.value"
-                >{{ dict.label }}</el-radio>
+                >{{ dict.label }}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -144,13 +147,13 @@
 </template>
 
 <script>
-import { delSubject, listSubject, addSubject, updateSubject, getSubject, listExcludeSubject } from '@/api/edu/subejct'
+import {delSubject, listSubject, addSubject, updateSubject, getSubject, listExcludeSubject} from '@/api/edu/subejct'
 import Treeselect from '@riophae/vue-treeselect'
-import RightToolBar from '@/components/RightToolBar'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
-  components: { Treeselect, RightToolBar },
+  name: 'Subject',
+  components: {Treeselect},
   data() {
     return {
       // 遮罩层
@@ -195,10 +198,10 @@ export default {
       // 表单校验
       rules: {
         name: [
-          { required: true, message: '类别名称不能为空', trigger: 'blur' }
+          {required: true, message: '类别名称不能为空', trigger: 'blur'}
         ],
         orderNum: [
-          { required: true, message: '显示排序不能为空', trigger: 'blur' }
+          {required: true, message: '显示排序不能为空', trigger: 'blur'}
         ]
       }
     }
@@ -283,7 +286,7 @@ export default {
       })
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm: function () {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {
@@ -304,12 +307,13 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.$modal.confirm('是否确认删除类别名称为【' + row.name + '】的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除类别名称为【' + row.name + '】的数据项？').then(function () {
         return delSubject(row.id)
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess('删除成功')
-      }).catch(() => {})
+      }).catch(() => {
+      })
     }
   }
 }

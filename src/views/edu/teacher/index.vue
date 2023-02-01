@@ -42,7 +42,7 @@
       </el-form-item>
     </el-form>
 
-    <div style="margin-top: 10px">
+    <div style="display: inline-flex">
       <el-button
         type="primary"
         plain
@@ -66,8 +66,8 @@
         :disabled="multiple"
         @click="handleDelete"
       >删除</el-button>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </div>
-    <RightToolBar :show-search.sync="showSearch" @queryTable="getList" :columns="columns"></RightToolBar>
     <el-table style="margin-top: 10px" v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#eef1f6',color:'#606266'}">
       <el-table-column type="selection" width="55" align="center" />
@@ -191,12 +191,10 @@
 import { listTeacher, delTeacher, addTeacher, updateTeacher, getTeacher } from '@/api/edu/teacher'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
-import RightToolBar from '@/components/RightToolBar'
-import Pagination from '@/components/Pagination'
 
 export default {
-
-  components: { ImageCropper, PanThumb, RightToolBar, Pagination },
+  name: 'Teacher',
+  components: { ImageCropper, PanThumb },
 
   data() {
     return {
