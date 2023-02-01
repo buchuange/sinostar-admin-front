@@ -70,7 +70,7 @@
     </div>
     <el-table style="margin-top: 10px" v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#eef1f6',color:'#606266'}">
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="selection" width="50" align="center" />
       <el-table-column label="讲师名称" prop="teacherName" width="150" v-if="columns[0].visible" />
       <el-table-column label="讲师编号" prop="teacherCode" :show-overflow-tooltip="true" width="150" v-if="columns[1].visible" />
       <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="150" v-if="columns[2].visible" />
@@ -81,8 +81,8 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template v-if="scope.row.roleId !== 1" slot-scope="scope">
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
