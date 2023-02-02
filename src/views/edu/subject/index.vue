@@ -147,13 +147,13 @@
 </template>
 
 <script>
-import {delSubject, listSubject, addSubject, updateSubject, getSubject, listExcludeSubject} from '@/api/edu/subejct'
+import { delSubject, listSubject, addSubject, updateSubject, getSubject, listExcludeSubject } from '@/api/edu/subejct'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   name: 'Subject',
-  components: {Treeselect},
+  components: { Treeselect },
   data() {
     return {
       // 遮罩层
@@ -162,7 +162,7 @@ export default {
       showSearch: true,
       // 表格树数据
       subjectList: [],
-      // 部门树选项
+      // 类别树选项
       subjectOptions: [],
       // 弹出层标题
       title: '',
@@ -173,14 +173,8 @@ export default {
       // 重新渲染表格状态
       refreshTable: true,
       // 查询参数
-      queryParams: {
-        deptName: undefined,
-        status: undefined
-      },
-      selectParams: {
-        deptName: undefined,
-        status: undefined
-      },
+      queryParams: {},
+      selectParams: {},
       // 表单参数
       form: {
         orderNum: 0
@@ -198,10 +192,10 @@ export default {
       // 表单校验
       rules: {
         name: [
-          {required: true, message: '类别名称不能为空', trigger: 'blur'}
+          { required: true, message: '类别名称不能为空', trigger: 'blur' }
         ],
         orderNum: [
-          {required: true, message: '显示排序不能为空', trigger: 'blur'}
+          { required: true, message: '显示排序不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -218,7 +212,7 @@ export default {
         this.loading = false
       })
     },
-    /** 转换部门数据结构 */
+    /** 转换课程类别数据结构 */
     normalizer(node) {
       if (!node.children || !node.children.length) {
         delete node.children
@@ -279,7 +273,7 @@ export default {
       getSubject(row.id).then(response => {
         this.form = response
         this.open = true
-        this.title = '修改部门'
+        this.title = '修改课程类别'
       })
       listExcludeSubject(row.id).then(response => {
         this.subjectOptions = response

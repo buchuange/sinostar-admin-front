@@ -165,7 +165,7 @@
                          :width="300"
                          :height="300"
                          :key="imageCropperKey"
-                         :url="BASE_API+'/api/file/upload?fileHost=avatar'"
+                         :url="BASE_API+'/dl/support/api/file/upload?fileHost=avatar'"
                          field="file"
                          @close="close"
                          @crop-upload-success="cropSuccess"/>
@@ -276,6 +276,9 @@ export default {
         ],
         teacherCareer: [
           { required: true, message: "讲师资历不能为空", trigger: "blur" }
+        ],
+        orderNum: [
+          { required: true, message: "讲师顺序不能为空", trigger: "blur" }
         ],
         phoneNumber: [
           {
