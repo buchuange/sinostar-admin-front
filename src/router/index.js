@@ -172,15 +172,29 @@ export const asyncRoutes = [
     },
     {
       path: 'info',
-      name: '课程信息',
+      name: '发布课程',
       component: () => import('@/views/edu/course/form'),
       meta: { title: '发布课程', icon: 'form' }
     },
     {
       path: 'info/:id',
-      name: '编辑课程信息',
+      name: '编辑课程基本信息',
       component: () => import('@/views/edu/course/form'),
       meta: { title: '编辑课程基本信息', icon: 'form', noCache: true },
+      hidden: true
+    },
+    {
+      path: 'chapter/:id',
+      name: '创建课程大纲',
+      component: () => import('@/views/edu/course/chapter'),
+      meta: { title: '创建课程大纲', noCache: true },
+      hidden: true
+    },
+    {
+      path: 'publish/:id',
+      name: '最终发布',
+      component: () => import('@/views/edu/course/publish'),
+      meta: { title: '最终发布', noCache: true },
       hidden: true
     }
     ]

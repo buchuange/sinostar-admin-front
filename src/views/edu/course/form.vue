@@ -60,7 +60,7 @@
               v-model="courseInfo.lessonNum"
               :min="0"
               controls-position="right"
-              placeholder="请填写课程的总课时数"
+              placeholder="请填写总课时数"
             />
           </el-form-item>
         </el-col>
@@ -76,7 +76,7 @@
         </el-col>
       </el-row>
 
-      <el-form-item label="是否免费">
+      <el-form-item label="是否收费" title="注：课程价格设置为0时默认为免费">
         <el-radio-group v-model="courseInfo.chargeStatus">
           <el-radio
             v-for="dict in statusScopeOptions"
@@ -115,15 +115,16 @@
 
 import tinymce from '@/components/Tinymce'
 import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { listSubject } from '@/api/edu/subejct'
 import { queryTeacherList } from '@/api/edu/teacher'
-import { addCourse } from '@/api/edu/course'
+import { addCourse, getCourse, updateCourse } from '@/api/edu/course'
 
 const defaultForm = {
   lessonNum: 0,
   cover: process.env.VUE_APP_OSS_PATH + '/cover/default.jpg',
   price: 0.00,
-  chargeStatus: '1'
+  chargeStatus: '0'
 }
 
 export default {
@@ -138,12 +139,12 @@ export default {
       queryParams: {},
       statusScopeOptions: [
         {
-          value: '1',
-          label: '是'
-        },
-        {
           value: '0',
           label: '否'
+        },
+        {
+          value: '1',
+          label: '是'
         }
       ],
       courseId: '',
@@ -172,12 +173,12 @@ export default {
     if (this.$route.params && this.$route.params.id) {
       this.courseId = this.$route.params.id
       // 根据id获取课程基本信息
-      this.fetchCourseInfoById()
+      this.getCourse()
     } else {
       this.courseInfo = { ...defaultForm }
-      this.getTeacherList()
-      this.getSubjectTree()
     }
+    this.getTeacherList()
+    this.getSubjectTree()
   },
   methods: {
     /** 初始化所有讲师 */
@@ -229,28 +230,10 @@ export default {
       }
     },
     // 根据id获取课程基本信息
-    fetchCourseInfoById() {
-      course.getCourseInfoById(this.courseId).then(response => {
-        this.courseInfo = response.data
-
-        // 初始化分类列表
-        subject.getNestedTreeList().then(responseSubject => {
-          this.subjectNestedList = responseSubject.data
-          for (let i = 0; i < this.subjectNestedList.length; i++) {
-            if (this.subjectNestedList[i].id === this.courseInfo.subjectParentId) {
-              this.subSubjectList = this.subjectNestedList[i].children
-            }
-          }
-        })
-
-        // 获取讲师列表
-        this.getTeacherList()
-      }).catch((response) => {
-        this.$message({
-          type: 'error',
-          message: response.data
-        })
-      })
+    getCourse() {
+      getCourse(this.courseId).then(response => {
+        this.courseInfo = response
+      }).catch(() => {})
     },
     saveOrUpdate: function() {
       this.$refs['courseInfo'].validate(valid => {
@@ -259,6 +242,7 @@ export default {
           if (this.courseId === '') {
             this.saveCourse()
           } else {
+            this.courseInfo.id = this.courseId
             this.updateCourse()
           }
         }
@@ -271,26 +255,20 @@ export default {
         this.$modal.msgSuccess('保存成功')
         // 路由跳转到第二步
         this.$router.push({
-          path: '/api/chapter/' + response.data
+          path: '/course/chapter/' + response.id
         })
       })
     },
     // 修改课程
     updateCourse() {
-      course.updateCourseInfoById(this.courseId, this.courseInfo)
-        .then(response => {
-          // 提示信息
-          this.$message({
-
-            type: 'success',
-
-            message: '修改课程信息成功！'
-          })
-          // 路由跳转到第二步
-          this.$router.push({
-            path: '/edu/course/chapter/' + this.courseId
-          })
+      updateCourse(this.courseInfo).then(response => {
+        // 提示信息
+        this.$modal.msgSuccess('修改成功')
+        // 路由跳转到第二步
+        this.$router.push({
+          path: '/course/chapter/' + response.id
         })
+      })
     }
   }
 }

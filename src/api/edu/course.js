@@ -25,7 +25,7 @@ export function delTeacher(id) {
   })
 }
 
-// 添加讲师
+// 添加课程
 export function addCourse(course) {
   return request({
     url: `/dl/edu/api/course/save`,
@@ -34,19 +34,19 @@ export function addCourse(course) {
   })
 }
 
-// 更新讲师
-export function updateTeacher(teacher) {
+// 更新课程
+export function updateCourse(teacher) {
   return request({
-    url: `/dl/edu/api/teacher/update`,
+    url: `/dl/edu/api/course/update`,
     method: 'post',
     data: teacher
   })
 }
 
-// 查询角色详细
-export function getTeacher(id) {
+// 查询课程详细
+export function getCourse(id) {
   return request({
-    url: `/dl/edu/api/teacher/detail/${id}`,
+    url: `/dl/edu/api/course/detail/${id}`,
     method: 'get'
   })
 }

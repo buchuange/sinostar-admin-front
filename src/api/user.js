@@ -18,7 +18,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/api/edu/users/login',
+    url: '/dl/edu/api/edu/users/login',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/api/edu/users/info',
+    url: '/dl/edu/api/edu/users/info',
     method: 'get',
     params: { token }
   })

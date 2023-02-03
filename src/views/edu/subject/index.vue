@@ -280,7 +280,7 @@ export default {
       })
     },
     /** 提交按钮 */
-    submitForm: function () {
+    submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {
@@ -301,7 +301,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.$modal.confirm('是否确认删除类别名称为【' + row.name + '】的数据项？').then(function () {
+      this.$modal.confirm('是否确认删除类别名称为【' + row.name + '】的数据项？').then(function() {
         return delSubject(row.id)
       }).then(() => {
         this.getList()
