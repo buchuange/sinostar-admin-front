@@ -116,9 +116,9 @@
 import tinymce from '@/components/Tinymce'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { listSubject } from '@/api/edu/subejct'
-import { queryTeacherList } from '@/api/edu/teacher'
-import { addCourse, getCourse, updateCourse } from '@/api/edu/course'
+import { listSubject } from '@/api/edu/subject/subejct'
+import { queryTeacherList } from '@/api/edu/teacher/teacher'
+import { addCourse, getCourse, updateCourse } from '@/api/edu/course/course'
 
 const defaultForm = {
   lessonNum: 0,
@@ -140,11 +140,11 @@ export default {
       statusScopeOptions: [
         {
           value: '0',
-          label: '否'
+          label: '默认（免费）'
         },
         {
           value: '1',
-          label: '是'
+          label: '收费'
         }
       ],
       courseId: '',

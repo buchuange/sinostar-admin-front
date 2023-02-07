@@ -71,11 +71,11 @@
     <el-table style="margin-top: 10px" v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#eef1f6',color:'#606266'}">
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column label="讲师名称" prop="teacherName" width="150" v-if="columns[0].visible" />
-      <el-table-column label="讲师编号" prop="teacherCode" :show-overflow-tooltip="true" width="150" v-if="columns[1].visible" />
-      <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="150" v-if="columns[2].visible" />
-      <el-table-column label="讲师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="150" v-if="columns[3].visible" />
-      <el-table-column label="手机号码" prop="phoneNumber" :show-overflow-tooltip="true" width="150" v-if="columns[4].visible" />
+      <el-table-column label="讲师名称" prop="teacherName" width="160" v-if="columns[0].visible" />
+      <el-table-column label="讲师编号" prop="teacherCode" :show-overflow-tooltip="true" width="160" v-if="columns[1].visible" />
+      <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="160" v-if="columns[2].visible" />
+      <el-table-column label="讲师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="160" v-if="columns[3].visible" />
+      <el-table-column label="手机号码" prop="phoneNumber" :show-overflow-tooltip="true" width="160" v-if="columns[4].visible" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180" v-if="columns[5].visible">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
@@ -188,7 +188,7 @@
 
 <script>
 
-import { listTeacher, delTeacher, addTeacher, updateTeacher, getTeacher } from '@/api/edu/teacher'
+import { listTeacher, delTeacher, addTeacher, updateTeacher, getTeacher } from '@/api/edu/teacher/teacher'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
 
@@ -386,7 +386,9 @@ export default {
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess('删除成功')
-      }).catch(() => {})
+      }).catch(() => {
+        this.$modal.msg('已取消删除')
+      })
     },
     addDateRange(params, dateRange) {
       const search = params

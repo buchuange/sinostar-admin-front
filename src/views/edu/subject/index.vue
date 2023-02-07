@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { delSubject, listSubject, addSubject, updateSubject, getSubject, listExcludeSubject } from '@/api/edu/subejct'
+import { delSubject, listSubject, addSubject, updateSubject, getSubject, listExcludeSubject } from '@/api/edu/subject/subejct'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -307,6 +307,7 @@ export default {
         this.getList()
         this.$modal.msgSuccess('删除成功')
       }).catch(() => {
+        this.$modal.msg('已取消删除')
       })
     }
   }
