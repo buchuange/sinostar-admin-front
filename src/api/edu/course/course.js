@@ -9,19 +9,11 @@ export function listTeacher(teacherQuery) {
   })
 }
 
-// 讲师列表
-export function queryTeacherList() {
+// 发布课程
+export function publishCourse(id) {
   return request({
-    url: `/api/teacher/list`,
-    method: 'get'
-  })
-}
-
-// 删除讲师
-export function delTeacher(id) {
-  return request({
-    url: `/dl/edu/api/teacher/delete/${id}`,
-    method: 'delete'
+    url: `/dl/edu/api/course/publish/${id}`,
+    method: 'post'
   })
 }
 
