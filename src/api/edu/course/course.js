@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
-// 讲师列表（条件查询分页）
-export function listTeacher(teacherQuery) {
+// 课程列表（条件查询分页）
+export function listCourse(courseQuery) {
   return request({
-    url: `/api/teacher/page-overview`,
+    url: `/dl/edu/api/course/page-overview`,
     method: 'post',
-    data: teacherQuery
+    data: courseQuery
   })
 }
 
@@ -43,3 +43,10 @@ export function getCourse(id) {
   })
 }
 
+// 删除课程信息
+export function delCourse(id) {
+  return request({
+    url: `/dl/edu/api/course/delete/${id}`,
+    method: 'delete'
+  })
+}

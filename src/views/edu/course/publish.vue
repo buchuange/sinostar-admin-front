@@ -26,14 +26,16 @@
 
     <div align="center">
       <el-button @click="previous">返回修改</el-button>
-      <el-button :disabled="saveBtnDisabled" type="primary" @click="publish">发布课程</el-button>
+      <el-button :disabled="saveBtnDisabled" type="primary" @click="publish">
+        {{ coursePublish.status === '0' ? '发布课程' : "取消发布" }}
+      </el-button>
     </div>
   </div>
 </template>
 
 <script>
 
-import { getCourse, publishCourse } from '@/api/edu/course/course'
+import {getCourse, publishCourse} from '@/api/edu/course/course'
 
 export default {
   data() {
@@ -69,10 +71,25 @@ export default {
     },
 
     publish() {
-      publishCourse(this.courseId).then(response => {
-        this.$modal.msgSuccess('发布成功')
-        this.$router.push({ path: '/course/list' })
-      })
+      if (this.coursePublish.status == '0') {
+        this.$modal.confirm('是否确认发布课程【' + this.coursePublish.title + '】？').then(() => {
+          publishCourse(this.courseId).then(response => {
+            this.$modal.msgSuccess('发布成功')
+            this.$router.push({ path: '/course/list' })
+          })
+        }).catch(() => {
+          this.$modal.msg('已取消操作')
+        })
+      } else {
+        this.$modal.confirm('是否取消发布课程【' + this.coursePublish.title + '】？').then(() => {
+          publishCourse(this.courseId).then(response => {
+            this.$modal.msgSuccess('取消成功')
+            this.$router.push({ path: '/course/list' })
+          })
+        }).catch(() => {
+          this.$modal.msg('已取消操作')
+        })
+      }
     }
   }
 }
