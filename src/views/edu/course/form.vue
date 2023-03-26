@@ -32,12 +32,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <!-- 课程讲师 -->
-          <el-form-item label="课程讲师">
+          <!-- 课程教师 -->
+          <el-form-item label="课程教师">
             <el-select
               v-model="courseInfo.teacherId"
               clearable
-              placeholder="请选择课程讲师"
+              placeholder="请选择课程教师"
               filterable
               remote
               :filter-method="dataFilter"
@@ -181,7 +181,7 @@ export default {
     this.getSubjectTree()
   },
   methods: {
-    /** 初始化所有讲师 */
+    /** 初始化所有教师 */
     getTeacherList() {
       queryTeacherList().then(response => {
         this.teacherList = response

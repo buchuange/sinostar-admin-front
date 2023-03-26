@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 讲师列表（条件查询分页）
+// 教师列表（条件查询分页）
 export function listTeacher(teacherQuery) {
   return request({
     url: `/dl/edu/api/teacher/page-overview`,
@@ -9,7 +9,7 @@ export function listTeacher(teacherQuery) {
   })
 }
 
-// 讲师列表
+// 教师列表
 export function queryTeacherList() {
   return request({
     url: `/dl/edu/api/teacher/list`,
@@ -17,7 +17,7 @@ export function queryTeacherList() {
   })
 }
 
-// 删除讲师
+// 删除教师
 export function delTeacher(id) {
   return request({
     url: `/dl/edu/api/teacher/delete/${id}`,
@@ -25,7 +25,7 @@ export function delTeacher(id) {
   })
 }
 
-// 添加讲师
+// 添加教师
 export function addTeacher(teacher) {
   return request({
     url: `/dl/edu/api/teacher/save`,
@@ -34,7 +34,7 @@ export function addTeacher(teacher) {
   })
 }
 
-// 更新讲师
+// 更新教师
 export function updateTeacher(teacher) {
   return request({
     url: `/dl/edu/api/teacher/update`,

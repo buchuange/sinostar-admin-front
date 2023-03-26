@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true">
-      <el-form-item label="讲师列表" prop="keyword">
+      <el-form-item label="教师列表" prop="keyword">
         <el-input
           v-model="queryParams.keyword"
-          placeholder="请输入讲师名称或编号"
+          placeholder="请输入教师名称或编号"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="讲师头衔" prop="level">
+      <el-form-item label="教师头衔" prop="level">
         <el-select
           v-model="queryParams.level"
-          placeholder="讲师头衔"
+          placeholder="教师头衔"
           clearable
           style="width: 240px"
         >
@@ -71,11 +71,12 @@
     <el-table style="margin-top: 10px" v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#eef1f6',color:'#606266'}">
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column label="讲师名称" prop="teacherName" width="160" v-if="columns[0].visible" />
-      <el-table-column label="讲师编号" prop="teacherCode" :show-overflow-tooltip="true" width="160" v-if="columns[1].visible" />
-      <el-table-column label="讲师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="160" v-if="columns[2].visible" />
-      <el-table-column label="讲师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="160" v-if="columns[3].visible" />
-      <el-table-column label="手机号码" prop="phoneNumber" :show-overflow-tooltip="true" width="160" v-if="columns[4].visible" />
+      <el-table-column label="序号" type="index" width="80"/>
+      <el-table-column label="教师名称" prop="teacherName" width="120" v-if="columns[0].visible" />
+      <el-table-column label="教师编号" prop="teacherCode" :show-overflow-tooltip="true" width="120" v-if="columns[1].visible" />
+      <el-table-column label="教师资历" prop="teacherCareer" :show-overflow-tooltip="true" width="200" v-if="columns[2].visible" />
+      <el-table-column label="教师头衔" prop="levelDetail" :show-overflow-tooltip="true" width="140" v-if="columns[3].visible" />
+      <el-table-column label="手机号码" prop="phoneNumber" :show-overflow-tooltip="true" width="140" v-if="columns[4].visible" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180" v-if="columns[5].visible">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
@@ -107,20 +108,20 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改讲师配置对话框 -->
+    <!-- 添加或修改教师配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="讲师名称" prop="teacherName">
-              <el-input v-model="form.teacherName" placeholder="请输入讲师名称" />
+            <el-form-item label="教师名称" prop="teacherName">
+              <el-input v-model="form.teacherName" placeholder="请输入教师名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="讲师头衔" prop="level">
+            <el-form-item label="教师头衔" prop="level">
               <el-select
                 v-model="form.level"
-                placeholder="讲师头衔"
+                placeholder="教师头衔"
                 clearable
                 style="width: 240px"
               >
@@ -141,13 +142,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="讲师顺序" prop="orderNum">
+            <el-form-item label="教师顺序" prop="orderNum">
               <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 讲师头像 -->
-        <el-form-item label="讲师头像" prop="avatar">
+        <!-- 教师头像 -->
+        <el-form-item label="教师头像" prop="avatar">
           <!-- 头衔缩略图 -->
           <pan-thumb :image="form.avatar"/>
           <!-- 文件上传按钮 -->
@@ -170,12 +171,12 @@
                          @close="close"
                          @crop-upload-success="cropSuccess"/>
         </el-form-item>
-        <el-form-item label="讲师资历" prop="teacherCareer">
-          <el-input v-model="form.teacherCareer" placeholder="请输入讲师资历"/>
+        <el-form-item label="教师资历" prop="teacherCareer">
+          <el-input v-model="form.teacherCareer" placeholder="请输入教师资历"/>
         </el-form-item>
-        <el-form-item label="讲师简介" prop="teacherIntro">
+        <el-form-item label="教师简介" prop="teacherIntro">
           <el-input v-model="form.teacherIntro" :autosize="{ minRows: 2, maxRows: 5}" type="textarea"
-                    placeholder="请输入讲师简介"/>
+                    placeholder="请输入教师简介"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -229,7 +230,7 @@ export default {
       levelScopeOptions: [
         {
           value: '1',
-          label: '初级讲师'
+          label: '初级助教'
         },
         {
           value: '2',
@@ -237,7 +238,7 @@ export default {
         },
         {
           value: '3',
-          label: '高级讲师'
+          label: '高级教授'
         }
       ],
       // 查询参数
@@ -249,10 +250,10 @@ export default {
       },
       // 列信息
       columns: [
-        { key: 0, label: `讲师名称`, visible: true },
-        { key: 1, label: `讲师编号`, visible: true },
-        { key: 2, label: `讲师资历`, visible: true },
-        { key: 3, label: `讲师头衔`, visible: true },
+        { key: 0, label: `教师名称`, visible: true },
+        { key: 1, label: `教师编号`, visible: true },
+        { key: 2, label: `教师资历`, visible: true },
+        { key: 3, label: `教师头衔`, visible: true },
         { key: 4, label: `手机号码`, visible: true },
         { key: 5, label: `创建时间`, visible: true }
       ],
@@ -268,17 +269,17 @@ export default {
       // 表单校验
       rules: {
         teacherName: [
-          { required: true, message: "讲师名称不能为空", trigger: "blur" },
-          { min: 2, max: 20, message: '讲师名称长度必须介于 2 和 20 之间', trigger: 'blur' }
+          { required: true, message: "教师名称不能为空", trigger: "blur" },
+          { min: 2, max: 20, message: '教师名称长度必须介于 2 和 20 之间', trigger: 'blur' }
         ],
         level: [
-          { required: true, message: "讲师头衔不能为空", trigger: "blur" }
+          { required: true, message: "教师头衔不能为空", trigger: "blur" }
         ],
         teacherCareer: [
-          { required: true, message: "讲师资历不能为空", trigger: "blur" }
+          { required: true, message: "教师资历不能为空", trigger: "blur" }
         ],
         orderNum: [
-          { required: true, message: "讲师顺序不能为空", trigger: "blur" }
+          { required: true, message: "教师顺序不能为空", trigger: "blur" }
         ],
         phoneNumber: [
           {
@@ -298,7 +299,7 @@ export default {
     this.getList()
   },
   methods: {
-    /** 查询讲师列表 */
+    /** 查询教师列表 */
     getList() {
       this.loading = true
       listTeacher(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
@@ -345,7 +346,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = '添加讲师'
+      this.title = '添加教师'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -354,7 +355,7 @@ export default {
       getTeacher(teacherId).then(response => {
         this.form = response
         this.open = true
-        this.title = '修改讲师'
+        this.title = '修改教师'
       })
     },
     /** 提交按钮 */
@@ -381,7 +382,7 @@ export default {
     handleDelete(row) {
       const teacherCodes = row.teacherCode || this.codes
       const teacherIds = row.id || this.ids
-      this.$modal.confirm('是否确认删除讲师编号为【' + teacherCodes + '】的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除教师编号为【' + teacherCodes + '】的数据项？').then(function() {
         return delTeacher(teacherIds)
       }).then(() => {
         this.getList()

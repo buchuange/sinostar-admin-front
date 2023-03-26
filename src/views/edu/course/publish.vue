@@ -15,7 +15,7 @@
       <div class="main">
         <h1>{{ coursePublish.title }}</h1>
         <p><span>所属分类：{{ coursePublish.subjectDetail }}</span></p>
-        <p>课程讲师：{{ coursePublish.teacherName }}</p>
+        <p>课程教师：{{ coursePublish.teacherName }}</p>
         <p>
           <span>上传于：{{ coursePublish.createTime }}</span>
           <span style="margin-left: 20px">共{{ coursePublish.lessonNum }}课时</span>
