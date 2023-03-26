@@ -177,6 +177,12 @@ export const asyncRoutes = [
       meta: { title: '发布课程', icon: 'form' }
     },
     {
+      path: 'comment',
+      name: '评论列表',
+      component: () => import('@/views/edu/course/comment'),
+      meta: { title: '评论列表', icon: 'el-icon-s-comment' }
+    },
+    {
       path: 'info/:id',
       name: '编辑课程基本信息',
       component: () => import('@/views/edu/course/form'),
@@ -199,6 +205,19 @@ export const asyncRoutes = [
     }
     ]
   },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/edu/order/index'),
+        name: '订单管理',
+        meta: { title: '订单管理', icon: 'el-icon-coin', noCache: true }
+      }
+    ]
+  },
   // 统计分析
   {
     path: '/statistics',
@@ -215,25 +234,25 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/system/user',
-    name: 'System',
-    meta: { title: '系统管理', icon: 'el-icon-s-tools' },
-    children: [{
-      path: 'user',
-      name: '用户管理',
-      component: () => import('@/views/system/user/index'),
-      meta: { title: '用户管理', icon: 'user' }
-    },
-    {
-      path: 'role',
-      name: '角色管理',
-      component: () => import('@/views/system/role/index'),
-      meta: { title: '角色管理', icon: 'peoples' }
-    }]
-  },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   redirect: '/system/user',
+  //   name: 'System',
+  //   meta: { title: '系统管理', icon: 'el-icon-s-tools' },
+  //   children: [{
+  //     path: 'user',
+  //     name: '用户管理',
+  //     component: () => import('@/views/system/user/index'),
+  //     meta: { title: '用户管理', icon: 'user' }
+  //   },
+  //   {
+  //     path: 'role',
+  //     name: '角色管理',
+  //     component: () => import('@/views/system/role/index'),
+  //     meta: { title: '角色管理', icon: 'peoples' }
+  //   }]
+  // },
   // {
   //   path: '/permission',
   //   component: Layout,
@@ -275,19 +294,19 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-
-  {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
+  //
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/icons/index'),
+  //       name: 'Icons',
+  //       meta: { title: 'icons', icon: 'icon', noCache: true }
+  //     }
+  //   ]
+  // },
 
   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
@@ -451,18 +470,18 @@ export const asyncRoutes = [
   //   hidden: true
   // },
 
-  {
-    path: '/theme',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'theme', icon: 'theme' }
-      }
-    ]
-  },
+  // {
+  //   path: '/theme',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/theme/index'),
+  //       name: 'Theme',
+  //       meta: { title: 'theme', icon: 'theme' }
+  //     }
+  //   ]
+  // },
   //
   // {
   //   path: '/clipboard',
