@@ -6,6 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import {countNum, countOrder} from "@/api/statiscis";
 
 export default {
   mixins: [resize],
@@ -25,13 +26,12 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      data: null
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
+    this.initChart()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -43,7 +43,12 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
+      countOrder().then(response => {
+        this.data = response
+        this.initData()
+      })
+    },
+    initData() {
       this.chart.setOption({
         tooltip: {
           trigger: 'item',
@@ -52,22 +57,16 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['已支付', '待支付']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '订单数量',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.data,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }

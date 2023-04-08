@@ -14,3 +14,17 @@ export function showCharts(searchObj) {
     data: searchObj
   })
 }
+
+export function countNum() {
+  return request({
+    url: `/dl/edu/api/statistics/count-num`,
+    method: 'get'
+  })
+}
+
+export function countOrder() {
+  return request({
+    url: `/dl/edu/api/statistics/count-order`,
+    method: 'get'
+  })
+}
