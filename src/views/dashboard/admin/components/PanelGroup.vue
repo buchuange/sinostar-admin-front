@@ -72,7 +72,9 @@ export default {
     }
   },
   created() {
-    this.initNum()
+    setInterval(() => {
+      this.initNum()
+    }, 2000)
   },
   methods: {
     handleSetLineChartData(type) {

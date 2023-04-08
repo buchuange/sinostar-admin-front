@@ -6,7 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
-import {countNum, countOrder} from "@/api/statiscis";
+import { countOrder} from "@/api/statiscis";
 
 export default {
   mixins: [resize],
@@ -31,7 +31,9 @@ export default {
     }
   },
   mounted() {
-    this.initChart()
+    setInterval(() => {
+      this.initChart()
+    }, 2000)
   },
   beforeDestroy() {
     if (!this.chart) {
